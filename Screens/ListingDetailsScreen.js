@@ -6,25 +6,19 @@ const API = 'https://venueChope.pythonanywhere.com';
 const API_DELETE = '/venue/';
 
 export default function ListingDetailsScreen({ navigation, route }) {
+	async function deleteVenue(id) {
+		console.log('Deletion of the Venue.');
+		try {
+			const response = await axios.delete(API + API_DELETE + id);
+			console.log('Axios Success message');
+			console.log('Item been deleted');
+			navigation.navigate('Venue Listing');
+		} catch (e) {
+			console.log('Axios Error message');
+			console.log(e);
+		}
+	}
 
-
-async function deleteVenue(id){
-    console.log('Deletion of the Venue.');
-			try {
-				const response = await axios.delete(API + API_DELETE+id);
-                console.log('Axios Success message');
-                console.log('Item jas been deleted')
-			} catch (e) {
-				console.log('Axios Error message');
-				console.log(e);
-			}
-
-
-};
-
-
-	// console.log("This is detail log");
-	// console.log(route);
 	const { id, name, description, image } = route.params;
 	return (
 		<View style={styles.container}>
@@ -34,10 +28,13 @@ async function deleteVenue(id){
 			<Text style={styles.name}>{name}</Text>
 			<Text style={styles.description}>{description}</Text>
 			<View style={styles.buttonContainer}>
-				<TouchableOpacity style={styles.button} onPress={()=>deleteVenue(id)}>
+				<TouchableOpacity style={styles.button} onPress={() => deleteVenue(id)}>
 					<Text style={styles.buttonText}>Delete</Text>
 				</TouchableOpacity>
-				<TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Venue Edit', { ...route })}>
+				<TouchableOpacity
+					style={styles.button}
+					onPress={() => navigation.navigate('Venue Edit', { ...route.params })}
+				>
 					{/* <TouchableOpacity onPress={() => navigation.navigate('Venue Details', { ...item })}> */}
 					<Text style={styles.buttonText}>Edit</Text>
 				</TouchableOpacity>

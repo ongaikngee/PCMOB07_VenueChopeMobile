@@ -9,23 +9,26 @@ const API_VENUES = '/venues';
 export default function ListingScreen({ navigation }) {
 	const [ data, setData ] = useState([]);
 
-	useEffect(() => {
-		(async () => {
-			console.log('Welcome to the starting of the application.');
 
-			try {
-				const response = await axios.get(API + API_VENUES);
-				console.log('Axios Success message');
-				const newData = response.data;
-				//NTS: This is to cast the id to string for flatitem
-				newData.map((x)=>x.id = String(x.id))
-				setData(newData);
-			} catch (e) {
-				console.log('Axios Error message');
-				console.log(e);
-			}
-		})();
+	async function getVenue() {
+		try {
+			const response = await axios.get(API + API_VENUES);
+			console.log('Axios Success message');
+			const newData = response.data;
+			//NTS: This is to cast the id to string for flatitem
+			newData.map((x)=>x.id = String(x.id))
+			setData(newData);
+		} catch (e) {
+			console.log('Axios Error message');
+			console.log(e);
+		}
+	}
+
+	useEffect(() => {
+		console.log('Welcome to the starting of the application.');
+		getVenue();
 	}, []);
+
 
 	const renderItem = ({ item }) => {
 		return (
