@@ -26,7 +26,10 @@ export default function ListingScreen({ navigation }) {
 
 	useEffect(() => {
 		console.log('Welcome to the starting of the application.');
+		const naviListener = navigation.addListener("focus", ()=>getVenue());
+
 		getVenue();
+		return naviListener;
 	}, []);
 
 
@@ -45,6 +48,9 @@ export default function ListingScreen({ navigation }) {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>This is the listing Screen</Text>
+			<TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Venue Add')}>
+				<Text style={styles.buttonText }>Add</Text>
+			</TouchableOpacity>
 			<FlatList data={data} renderItem={renderItem} />
 		</View>
 	);
@@ -70,5 +76,18 @@ const styles = StyleSheet.create({
 	text: {
 		fontSize: 20,
 		fontWeight: 'bold'
+	},
+	button: {
+		padding: 10,
+		marginTop: 10,
+		width: 100,
+		height: 40,
+		borderRadius: 8,
+		backgroundColor: 'red',
+		borderWidth: 1
+	},
+	buttonText: {
+		fontSize: 18,
+		textAlign: 'center'
 	}
 });

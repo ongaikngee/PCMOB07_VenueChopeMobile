@@ -6,6 +6,7 @@ const API = 'https://venueChope.pythonanywhere.com';
 const API_DELETE = '/venue/';
 
 export default function ListingDetailsScreen({ navigation, route }) {
+	console.log("Welcome to Venue Details Screen.");
 	async function deleteVenue(id) {
 		console.log('Deletion of the Venue.');
 		try {
@@ -22,9 +23,6 @@ export default function ListingDetailsScreen({ navigation, route }) {
 	const { id, name, description, image } = route.params;
 	return (
 		<View style={styles.container}>
-			{/* <Text style={styles.title}>
-                This is the listing Details Screen
-            </Text> */}
 			<Text style={styles.name}>{name}</Text>
 			<Text style={styles.description}>{description}</Text>
 			<View style={styles.buttonContainer}>
@@ -35,7 +33,6 @@ export default function ListingDetailsScreen({ navigation, route }) {
 					style={styles.button}
 					onPress={() => navigation.navigate('Venue Edit', { ...route.params })}
 				>
-					{/* <TouchableOpacity onPress={() => navigation.navigate('Venue Details', { ...item })}> */}
 					<Text style={styles.buttonText}>Edit</Text>
 				</TouchableOpacity>
 			</View>
@@ -51,7 +48,8 @@ const styles = StyleSheet.create({
 		height: '100%'
 	},
 	name: {
-		fontSize: 36
+		fontSize: 36, 
+		textAlign:"center",
 	},
 	description: {
 		fontSize: 18

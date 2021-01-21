@@ -28,7 +28,6 @@ export default function ListingEditScreen({ route, navigation }) {
 			const response = await axios.put(API+API_UPDATE+id,{name:nameInput,description:descriptionInput});
 			console.log('Axios Success message');
 			console.log('Venue has beed updated');
-			console.log(response);
 			navigation.navigate("Venue Details");
 		} catch (e) {
 			console.log('Axios Error message');
