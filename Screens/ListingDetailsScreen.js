@@ -7,6 +7,8 @@ const API_DELETE = '/venue/';
 
 export default function ListingDetailsScreen({ navigation, route }) {
 	console.log("Welcome to Venue Details Screen.");
+
+	
 	async function deleteVenue(id) {
 		console.log('Deletion of the Venue.');
 		try {

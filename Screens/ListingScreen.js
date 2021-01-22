@@ -1,28 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import axios from 'axios';
-
-const API = 'https://venueChope.pythonanywhere.com';
-const API_CREATE = '/create_venue';
-const API_VENUES = '/venues';
+import {useHttpRequest } from '../hooks/api';
 
 export default function ListingScreen({ navigation }) {
-	const [ data, setData ] = useState([]);
-
-
-	async function getVenue() {
-		try {
-			const response = await axios.get(API + API_VENUES);
-			console.log('Axios Success message');
-			const newData = response.data;
-			//NTS: This is to cast the id to string for flatitem
-			newData.map((x)=>x.id = String(x.id))
-			setData(newData);
-		} catch (e) {
-			console.log('Axios Error message');
-			console.log(e);
-		}
-	}
+	const [data, getVenue] = useHttpRequest();
+	//in the above example of using hooks, I am able to pass in varible. it will 
+	//go into hooks and consoleLog. It is also able to create varible in hooks and pass it back.
+	//I now wants to pass a function into hooks. 
+	//I am now able to call the function inside the hooks. but the function is still in my main screen. 
+	//I will next try to pass in the function in hooks. And the function will run in hooks. it will 
+	//then return the function results. 
+	//Conclusion
+	//You will create the functions inside the custom hooks. you will then destruct the function
 
 	useEffect(() => {
 		console.log('Welcome to the starting of the application.');
