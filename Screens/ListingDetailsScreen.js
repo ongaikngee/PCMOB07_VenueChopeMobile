@@ -1,28 +1,14 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import axios from 'axios';
+import {useRequestVenue} from '../hooks/api';
 
-const API = 'https://venueChope.pythonanywhere.com';
-const API_DELETE = '/venue/';
 
 export default function ListingDetailsScreen({ navigation, route }) {
 	console.log("Welcome to Venue Details Screen.");
 
-	
-	async function deleteVenue(id) {
-		console.log('Deletion of the Venue.');
-		try {
-			const response = await axios.delete(API + API_DELETE + id);
-			console.log('Axios Success message');
-			console.log('Item been deleted');
-			navigation.navigate('Venue Listing');
-		} catch (e) {
-			console.log('Axios Error message');
-			console.log(e);
-		}
-	}
-
 	const { id, name, description, image } = route.params;
+	const [deleteVenue] = useRequestVenue();
+
 	return (
 		<View style={styles.container}>
 			<Text style={styles.name}>{name}</Text>

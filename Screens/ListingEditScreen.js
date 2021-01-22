@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, TouchableWithoutFeedback, Keyboard } from 'react-native';
-import axios from 'axios';
+import {useRequestEdit} from '../hooks/api';
 
 
 export default function ListingEditScreen({ route, navigation }) {
@@ -9,32 +9,13 @@ export default function ListingEditScreen({ route, navigation }) {
 	const [ nameInput, setNameInput ] = useState('');
 	const [ descriptionInput, setDescriptionInput ] = useState('');
 	const { id, name, description } = route.params;
-	const API = 'https://venueChope.pythonanywhere.com';
-	const API_UPDATE = '/venue/';
+	const [editVenue] = useRequestEdit();
 
 	useEffect(() => {
 		console.log('You are now in Edit Screen, UseEffect [].');
 		setNameInput(name);
 		setDescriptionInput(description);
 	}, []);
-
-	async function editVenue(id) {
-		console.log('You have click the edit button.');
-		console.log('The id you have selected is' + id);
-		console.log(nameInput);
-		console.log(descriptionInput);
-
-		try{
-			const response = await axios.put(API+API_UPDATE+id,{name:nameInput,description:descriptionInput});
-			console.log('Axios Success message');
-			console.log('Venue has beed updated');
-			navigation.navigate("Venue Details");
-		} catch (e) {
-			console.log('Axios Error message');
-			console.log(e);
-		}
-	}
-
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -54,7 +35,7 @@ export default function ListingEditScreen({ route, navigation }) {
 					numberOfLines={10}
 					onChangeText={(newtext) => setDescriptionInput(newtext)}
 				/>
-				<TouchableOpacity style={styles.button} onPress={() => editVenue(id)}>
+				<TouchableOpacity style={styles.button} onPress={() => editVenue(id, nameInput, descriptionInput)}>
 					<Text style={styles.buttonText}>Edit</Text>
 				</TouchableOpacity>
 			</View>

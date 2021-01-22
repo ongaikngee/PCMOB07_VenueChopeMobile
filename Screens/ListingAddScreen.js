@@ -1,26 +1,11 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableWithoutFeedback, TextInput, TouchableOpacity, Keyboard } from 'react-native';
+import {useRequestAdd} from '../hooks/api';
 
 export default function ListingAddScreen({navigation}) {
 	const [ nameInput, setNameInput ] = useState('');
-    const [ descriptionInput, setDescriptionInput ] = useState('');
-	const API = 'https://venueChope.pythonanywhere.com';
-	const API_ADD = '/create_venue';
-    
-    async function addVenue(){
-        console.log("Entering Axios Add Async function");
-        console.log(nameInput);
-        console.log(descriptionInput);
-        try{
-            console.log("Axio Success Message");
-            const response = await axios.post(API+API_ADD,{name:nameInput, description:descriptionInput});
-            navigation.navigate("Venue Listing");
-        }catch (e){
-            console.log("Axio Error Message");
-            console.log(e);
-        }
-    }
+	const [ descriptionInput, setDescriptionInput ] = useState('');
+	const [addVenue] = useRequestAdd();
 
 	return (
 		<TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
@@ -35,7 +20,7 @@ export default function ListingAddScreen({navigation}) {
 					numberOfLines={10}
 					onChangeText={(newtext) => setDescriptionInput(newtext)}
 				/>
-				<TouchableOpacity style={styles.button} onPress={() => addVenue()}>
+				<TouchableOpacity style={styles.button} onPress={() => addVenue(nameInput, descriptionInput)}>
 					<Text style={styles.buttonText}>Add Venue</Text>
 				</TouchableOpacity>
 			</View>
