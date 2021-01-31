@@ -1,62 +1,82 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import {useRequestVenue} from '../hooks/api';
-
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { useGetVenue, useDeleteVenue } from '../hooks/api';
 
 export default function ListingDetailsScreen({ navigation, route }) {
-	console.log("Welcome to Venue Details Screen.");
+	const { id } = route.params;
+	const [ deleteVenue ] = useDeleteVenue();
+	const [ name, description, image, getVenue ] = useGetVenue();
+	// const {nameOut, descriptionOut} = info;
 
-	const { id, name, description, image } = route.params;
-	const [deleteVenue] = useRequestVenue();
+	useEffect(() => {
+		const naviListener = navigation.addListener('focus', () => getVenue(id));
+		console.log('you are useEffect');
+		console.log(id);
+		getVenue(id);
+		return naviListener;
+	}, []);
+
+	console.log('he');
+	// console.log(info);
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.name}>{name}</Text>
-			<Text style={styles.description}>{description}</Text>
-			<View style={styles.buttonContainer}>
-				<TouchableOpacity style={styles.button} onPress={() => deleteVenue(id)}>
-					<Text style={styles.buttonText}>Delete</Text>
-				</TouchableOpacity>
-				<TouchableOpacity
-					style={styles.button}
-					onPress={() => navigation.navigate('Venue Edit', { ...route.params })}
-				>
-					<Text style={styles.buttonText}>Edit</Text>
-				</TouchableOpacity>
+		<ScrollView style={styles.container}>
+			<View>
+				<Text style={styles.name}>{name}</Text>
+				{image && <Image source={{ uri: image }} style={styles.image} />}
+				<Text style={styles.description}>{description}</Text>
+				<View style={styles.buttonContainer}>
+					<TouchableOpacity style={styles.button} onPress={() => deleteVenue(id)}>
+						<Text style={styles.buttonText}>Delete</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={styles.button}
+						onPress={() => navigation.navigate('Venue Edit', { ...route.params })}
+					>
+						<Text style={styles.buttonText}>Edit</Text>
+					</TouchableOpacity>
+				</View>
 			</View>
-		</View>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
-		paddingLeft: 10,
-		paddingRight: 10,
-		backgroundColor: '#F7B267',
-		height: '100%'
+		backgroundColor: '#EEEEEE',
+		height: '100%',
+		padding:5,
 	},
 	name: {
-		fontSize: 36, 
-		textAlign:"center",
+		textAlign: 'center',
+		fontSize:24,
+		marginTop:15,
+		marginBottom:15,
+		color: '#326273',
 	},
 	description: {
-		fontSize: 18
+		marginTop:15,
+		marginBottom:5,
+		color: '#326273',
 	},
 	buttonContainer: {
 		flexDirection: 'row',
 		justifyContent: 'space-around',
-		marginTop: 30
+		marginTop: 30,
 	},
 	button: {
 		padding: 10,
-		width: 100,
-		height: 40,
+		width: 200,
 		borderRadius: 8,
-		backgroundColor: 'red',
+		backgroundColor: '#C0DFA1',
 		borderWidth: 1
 	},
 	buttonText: {
-		fontSize: 18,
 		textAlign: 'center'
+	},
+	image: {
+		width: "100%",
+		height: 250,
+		borderRadius:15,
 	}
 });

@@ -1,34 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import {useHttpRequest } from '../hooks/api';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Image } from 'react-native';
+import { useGetVenues } from '../hooks/api';
+import { AntDesign } from '@expo/vector-icons';
 
 export default function ListingScreen({ navigation }) {
-	const [data, getVenue] = useHttpRequest();
-	//in the above example of using hooks, I am able to pass in varible. it will 
-	//go into hooks and consoleLog. It is also able to create varible in hooks and pass it back.
-	//I now wants to pass a function into hooks. 
-	//I am now able to call the function inside the hooks. but the function is still in my main screen. 
-	//I will next try to pass in the function in hooks. And the function will run in hooks. it will 
-	//then return the function results. 
-	//Conclusion
-	//You will create the functions inside the custom hooks. you will then destruct the function
+	const [ data, getVenues ] = useGetVenues();
 
 	useEffect(() => {
-		console.log('Welcome to the starting of the application.');
-		const naviListener = navigation.addListener("focus", ()=>getVenue());
-
-		getVenue();
+		const naviListener = navigation.addListener('focus', () => getVenues());
+		getVenues();
 		return naviListener;
 	}, []);
 
+	useEffect(() => {
+		navigation.setOptions({
+			headerRight: () => (
+				<TouchableOpacity onPress={() => navigation.navigate('Venue Add')}>
+					<AntDesign name="plussquareo" size={32} color="black" style={{ paddingRight: 15 }} />
+				</TouchableOpacity>
+			)
+		});
+	});
 
 	const renderItem = ({ item }) => {
 		return (
 			<TouchableOpacity onPress={() => navigation.navigate('Venue Details', { ...item })}>
 				<View style={styles.card}>
 					<Text style={styles.text}>{item.name}</Text>
-					<Text>{item.description}</Text>
-					<Text>Available</Text>
+					<Text style={styles.description}>{item.description}</Text>
+					{item.image && <Image source={{ uri: item.image }} style={styles.image} />}
 				</View>
 			</TouchableOpacity>
 		);
@@ -36,10 +36,10 @@ export default function ListingScreen({ navigation }) {
 
 	return (
 		<View style={styles.container}>
-			<Text style={styles.title}>This is the listing Screen</Text>
-			<TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('Venue Add')}>
-				<Text style={styles.buttonText }>Add</Text>
-			</TouchableOpacity>
+			<Text style={styles.title}>
+				Founded in 2009, VenueChope is the premier event planner and venue provider in Singapore. VenueChope
+				will weave a tapestry of beautiful moment and regale guests for any occasion.{' '}
+			</Text>
 			<FlatList data={data} renderItem={renderItem} />
 		</View>
 	);
@@ -47,36 +47,36 @@ export default function ListingScreen({ navigation }) {
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: '#F7B267',
+		backgroundColor: '#EEEEEE',
 		height: '100%'
 	},
 	title: {
-		fontSize: 30,
 		textAlign: 'center',
-		marginBottom: 40,
-		marginTop: 10
+		color: '#326273',
+		marginTop: 10,
+		marginBottom: 10,
+		marginLeft: 15,
+		marginRight: 15
 	},
 	card: {
-		backgroundColor: '#F25C54',
+		backgroundColor: '#C0DFA1',
 		margin: 2,
-		borderRadius: 25,
+		borderRadius: 10,
 		padding: 10
 	},
 	text: {
-		fontSize: 20,
-		fontWeight: 'bold'
+		fontSize: 24,
+		fontWeight: 'bold',
+		color:"#326273",
 	},
-	button: {
-		padding: 10,
-		marginTop: 10,
+	description:{
+		marginTop:5,
+		marginBottom:10,
+		color:"#326273",
+	},
+	image: {
 		width: 100,
-		height: 40,
-		borderRadius: 8,
-		backgroundColor: 'red',
-		borderWidth: 1
-	},
-	buttonText: {
-		fontSize: 18,
-		textAlign: 'center'
+		height: 100,
+		borderRadius: 15
 	}
 });

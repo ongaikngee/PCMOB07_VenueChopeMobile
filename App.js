@@ -14,7 +14,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Venue Listing" component={ListingScreen} />
+        <Stack.Screen name="VenueChope" component={ListingScreen} />
         <Stack.Screen name="Venue Details" component={ListingDetailsScreen} />
         <Stack.Screen name="Venue Edit" component={ListingEditScreen} />
         <Stack.Screen name="Venue Add" component={ListingAddScreen} />

@@ -4,7 +4,6 @@ import {useRequestEdit} from '../hooks/api';
 
 
 export default function ListingEditScreen({ route, navigation }) {
-	console.log('Entering Edit Screen');
 
 	const [ nameInput, setNameInput ] = useState('');
 	const [ descriptionInput, setDescriptionInput ] = useState('');
@@ -12,7 +11,6 @@ export default function ListingEditScreen({ route, navigation }) {
 	const [editVenue] = useRequestEdit();
 
 	useEffect(() => {
-		console.log('You are now in Edit Screen, UseEffect [].');
 		setNameInput(name);
 		setDescriptionInput(description);
 	}, []);
@@ -45,15 +43,15 @@ export default function ListingEditScreen({ route, navigation }) {
 
 const styles = StyleSheet.create({
 	container: {
-		paddingLeft: 10,
-		paddingRight: 10,
-		backgroundColor: '#F7B267',
-		height: '100%'
+		backgroundColor: '#EEEEEE',
+		height: '100%',
+		padding:5,
 	},
 	title: {
-		fontSize: 30,
+		fontSize: 24,
 		textAlign: 'center',
-		marginTop: 10
+		marginTop: 10,
+		color: '#326273',
 	},
 	textInput: {
 		width: '100%',
@@ -61,22 +59,20 @@ const styles = StyleSheet.create({
 		borderWidth: 1,
 		fontSize: 18,
 		paddingLeft: 10,
-		// color:"white",
 		backgroundColor: 'white'
 	},
 	header: {
 		fontWeight: 'bold',
-		fontSize: 18,
-		marginTop: 30
+		marginTop: 30,
+		color: '#326273',
 	},
 	button: {
 		padding: 10,
-		marginTop: 10,
-		width: 100,
-		height: 40,
+		width: "100%",
 		borderRadius: 8,
-		backgroundColor: 'red',
-		borderWidth: 1
+		backgroundColor: '#C0DFA1',
+		borderWidth: 1,
+		marginTop:15,
 	},
 	buttonText: {
 		fontSize: 18,

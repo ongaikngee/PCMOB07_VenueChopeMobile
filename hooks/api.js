@@ -1,20 +1,26 @@
-import React, {useState} from 'react';
+import { useState } from 'react';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const API = 'https://venueChope.pythonanywhere.com';
 const API_VENUES = '/venues';
-const API_DELETE = '/venue/'
-const API_UPDATE = '/venue/'
+const API_ADDUPDATE = '/venue/';
 const API_ADD = '/create_venue';
+
+//Custom Hooks documnetation
+//useGetVenues : GET all venues, returning an array of objects
+//useGETVenue : GET selected venue. 
+//useDeleteVenue : DELETE of venue.
+//useAddVenue : POST new venue.
 
 
 //all venues hooks
-export function useHttpRequest() {
-    const [ data, setData ] = useState([]);
-
-	console.log('You have entered useHttpRequest Hooks!');
-
-	async function getVenue() {
+export function useGetVenues() {
+	const [ data, setData ] = useState([]);
+	async function getVenues() {
+		console.log("**********************")
+		console.log("GET all venues.")
 		try {
 			const response = await axios.get(API + API_VENUES);
 			console.log('Axios Success message');
@@ -23,80 +29,119 @@ export function useHttpRequest() {
 			newData.map((x) => (x.id = String(x.id)));
 			setData(newData);
 		} catch (e) {
-			console.log('Axios Error message');
-			console.log(e);
+			console.log('Axio Error Message');
+			console.log(e.response);
 		}
-    }
+	}
 
-	return [data, getVenue];
+	return [ data, getVenues ];
+}
+
+
+export function useGetVenue(){
+
+	const [info, setInfo] = useState();
+	const [name, setName] = useState("");
+	const [description, setDescription] = useState("");
+	const [image, setImage] = useState(null);
+
+	async function getVenue(id){
+
+		try{
+
+			const response = await axios.get(API + API_ADDUPDATE + id);
+			console.log('Axios Success message');
+			setInfo(response.data);
+			setName(response.data.name);
+			setDescription(response.data.description);
+			setImage(response.data.image);
+			
+		}
+		catch(e){
+			console.log("Asios error");
+			console.log(e.response);
+		}
+
+
+
+	}
+
+	return [name, description, image, getVenue];
+
 }
 
 //delete hooks
-export function useRequestVenue(){
-	console.log("You are now in the new hooks: useRequestVenue");
-	// console.log(id);
+export function useDeleteVenue() {
+	const navigation = useNavigation();
 
 	async function deleteVenue(id) {
-		console.log('Deletion of the Venue.');
+		console.log("**********************")
+		console.log("DELETE venue.")
 		try {
-			const response = await axios.delete(API + API_DELETE + id);
+			const response = await axios.delete(API + API_ADDUPDATE + id);
 			console.log('Axios Success message');
 			console.log('Item been deleted');
-			// navigation.navigate('Venue Listing');
+			navigation.navigate('VenueChope');
 		} catch (e) {
-			console.log('Axios Error message');
-			console.log(e);
+			console.log('Axio Error Message');
+			console.log(e.response);
 		}
 	}
 
-	return [deleteVenue];
+	return [ deleteVenue ];
 }
-
 
 //update hooks
-export function useRequestEdit(){
-	console.log("You are now in useRequestEdit");
-	// console.log(id);
+export function useRequestEdit() {
+	const navigation = useNavigation();
 
 	async function editVenue(id, nameInput, descriptionInput) {
-		console.log('You have click the edit button.');
-		console.log('The id you have selected is ' + id);
-		console.log(nameInput);
-		console.log(descriptionInput);
+		console.log("**********************")
+		console.log("UPDATE venue.")
 
-		try{
-			const response = await axios.put(API+API_UPDATE+id,{name:nameInput,description:descriptionInput});
+		try {
+			const response = await axios.put(API + API_ADDUPDATE + id, {
+				name: nameInput,
+				description: descriptionInput
+			});
 			console.log('Axios Success message');
 			console.log('Venue has beed updated');
-			// navigation.navigate("Venue Details");
+			navigation.navigate('Venue Details');
 		} catch (e) {
-			console.log('Axios Error message');
-			console.log(e);
+			console.log('Axio Error Message');
+			console.log(e.response);
 		}
 	}
 
-	return [editVenue];
+	return [ editVenue ];
 }
 
-
 //Add hooks
-export function useRequestAdd(){
+export function useAddVenue() {
+	console.log("**********************")
+	console.log("POST new venue.")
+	const navigation = useNavigation();
 
-	console.log("You are now in useRequestAdd");
+	async function addVenue(nameInput, descriptionInput, ImageInput) {
 
-	async function addVenue(nameInput, descriptionInput){
-        console.log("Entering Axios Add Async function");
-        console.log(nameInput);
-        console.log(descriptionInput);
-        try{
-            console.log("Axio Success Message");
-            const response = await axios.post(API+API_ADD,{name:nameInput, description:descriptionInput});
-            // navigation.navigate("Venue Listing");
-        }catch (e){
-            console.log("Axio Error Message");
-            console.log(e);
-        }
+		//nts: extracting the filename. needed later if just to store the filename rather than the path
+		// let uri = ImageInput;
+		// const INDEX = uri.lastIndexOf("/");
+		// const LENGTH = uri.length;
+		// const RESULT = uri.substr(INDEX+1, LENGTH)
+
+		try {
+			console.log('Axio Success Message');
+			await axios.post(API + API_ADD, {
+				name: nameInput,
+				description: descriptionInput,
+				image: ImageInput
+			});
+			navigation.navigate('VenueChope');
+		} catch (e) {
+			console.log('Axio Error Message');
+			console.log(e.response);
+		}
 	}
-	
-	return [addVenue];
+	return [ addVenue ];
 }
